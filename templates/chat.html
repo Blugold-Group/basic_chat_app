@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Super Secure Chat</title>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+</head>
+<body>
+    <h2>Super Secure Chat App</h2>
+    <ul id="messages"></ul>
+    <input id="messageInput" autocomplete="off" placeholder="Type your message..." />
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        const socket = io(location.protocol + '//' + document.domain + ':' + location.port);
+
+        socket.on('message', function(msg) {
+            const item = document.createElement('li');
+            item.textContent = msg;
+            document.getElementById('messages').appendChild(item);
+        });
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value;
+            if (message.trim()) {
+                socket.send(message);
+                input.value = '';
+            }
+        }
+    </script>
+</body>
+</html>
